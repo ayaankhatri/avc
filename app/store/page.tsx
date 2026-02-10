@@ -48,7 +48,7 @@ export default function StorePage() {
         <div className="overflow-hidden rounded-xl border bg-card">
           <div className="relative aspect-square">
             <Image
-              src="/resq-helmet.jpg"
+              src="/storefront.jpeg"
               alt="ResQ Smart Safety Helmet"
               fill
               className="object-cover"
