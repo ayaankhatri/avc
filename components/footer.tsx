@@ -14,6 +14,20 @@ export function Footer() {
     setMounted(true)
   }, [])
 
+  if (!mounted) {
+    return <Image
+              src={
+                currentTheme === "dark"
+                  ? "/dark-logo.png"
+                  : "/light-logo.png"
+              }
+              alt="ResQ logo"
+              width={36}
+              height={36}
+              className="rounded-lg"
+            />
+  }
+
   return (
     <footer className="border-t bg-card text-card-foreground">
       <div className="mx-auto max-w-7xl px-4 py-12">

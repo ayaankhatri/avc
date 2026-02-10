@@ -13,14 +13,7 @@ import {
   SheetTrigger,
   SheetTitle,
 } from "@/components/ui/sheet"
-import {
-  Home,
-  Activity,
-  ShoppingBag,
-  Users,
-  Menu,
-  LogOut,
-} from "lucide-react"
+import { Home, Activity, ShoppingBag, Users, Menu, UserCircle } from "lucide-react"
 import type { User } from "@supabase/supabase-js"
 import { useTheme } from "next-themes"
 
@@ -63,11 +56,11 @@ export function Header() {
     return () => subscription.unsubscribe()
   }, [supabase.auth])
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    setUser(null)
-    window.location.href = "/"
-  }
+  const displayName =
+    user?.user_metadata?.name ||
+    user?.user_metadata?.username ||
+    user?.email?.split("@")[0] ||
+    "Profile"
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
@@ -99,10 +92,11 @@ export function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-colors hover:bg-secondary ${pathname === link.href
+              className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-colors hover:bg-secondary ${
+                pathname === link.href
                   ? "bg-secondary text-foreground"
                   : "text-muted-foreground"
-                }`}
+              }`}
             >
               {link.label}
             </Link>
@@ -115,15 +109,17 @@ export function Header() {
 
           <div className="hidden items-center gap-2 md:flex">
             {user ? (
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
-                  {user.email?.split("@")[0]}
-                </span>
-                <Button variant="outline" size="sm" onClick={handleSignOut}>
-                  <LogOut className="mr-1.5 h-4 w-4" />
-                  Sign Out
-                </Button>
-              </div>
+              <Link
+                href="/profile"
+                className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-secondary ${
+                  pathname === "/profile"
+                    ? "bg-secondary text-foreground"
+                    : "text-muted-foreground"
+                }`}
+              >
+                <UserCircle className="h-4 w-4" />
+                {displayName}
+              </Link>
             ) : (
               <>
                 <Link href="/auth/login">
@@ -158,10 +154,11 @@ export function Header() {
                       key={link.href}
                       href={link.href}
                       onClick={() => setOpen(false)}
-                      className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-secondary ${pathname === link.href
+                      className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-secondary ${
+                        pathname === link.href
                           ? "bg-secondary text-foreground"
                           : "text-muted-foreground"
-                        }`}
+                      }`}
                     >
                       <Icon className="h-4 w-4" />
                       {link.label}
@@ -172,16 +169,18 @@ export function Header() {
                 <div className="my-3 border-t" />
 
                 {user ? (
-                  <Button
-                    variant="outline"
-                    onClick={() => {
-                      handleSignOut()
-                      setOpen(false)
-                    }}
+                  <Link
+                    href="/profile"
+                    onClick={() => setOpen(false)}
+                    className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors hover:bg-secondary ${
+                      pathname === "/profile"
+                        ? "bg-secondary text-foreground"
+                        : "text-muted-foreground"
+                    }`}
                   >
-                    <LogOut className="mr-1.5 h-4 w-4" />
-                    Sign Out
-                  </Button>
+                    <UserCircle className="h-4 w-4" />
+                    {displayName}
+                  </Link>
                 ) : (
                   <div className="flex flex-col gap-2">
                     <Link href="/auth/login" onClick={() => setOpen(false)}>
